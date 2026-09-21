@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Parqueo UPN — Evaluación T1</title>
+    <meta name="description" content="Base de Datos Avanzadas y Big Data - Evaluación T1 - Sistema de Gestión de Parqueo - Universidad Privada del Norte">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: #1a1f35;
+            --bg-card-hover: #222845;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-pink: #ec4899;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #1e293b;
+            --gradient-1: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            --gradient-2: linear-gradient(135deg, #06b6d4, #3b82f6);
+            --gradient-3: linear-gradient(135deg, #8b5cf6, #ec4899);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .bg-grid::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 100px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 24px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .badge .dot {
+            width: 8px; height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .hero h1 .icon { -webkit-text-fill-color: initial; }
+
+        .hero .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 12px;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .hero .course {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 60px;
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        .stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.1);
+        }
+
+        .stat .number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Headers */
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-icon {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .section-header .tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        /* Cards Grid */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .card-blue::before { background: var(--gradient-2); }
+        .card-purple::before { background: var(--gradient-3); }
+        .card-green::before { background: linear-gradient(135deg, #10b981, #06b6d4); }
+        .card-orange::before { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .card .card-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        /* ER Diagram section */
+        .er-diagram {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 48px;
+            overflow-x: auto;
+        }
+
+        .er-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .er-table th {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .er-table td {
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .er-table tr:hover td {
+            background: rgba(59, 130, 246, 0.03);
+            color: var(--text-primary);
+        }
+
+        .er-table .pk { color: var(--accent-orange); font-weight: 600; }
+        .er-table .fk { color: var(--accent-cyan); font-weight: 500; }
+        .er-table .table-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent-purple);
+        }
+
+        /* Code Block */
+        .code-section {
+            margin-bottom: 48px;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1a1f35;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: 16px 16px 0 0;
+            padding: 16px 24px;
+        }
+
+        .code-header .filename {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-header .dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .code-header .dots span {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-header .dots span:nth-child(1) { background: #ef4444; }
+        .code-header .dots span:nth-child(2) { background: #f59e0b; }
+        .code-header .dots span:nth-child(3) { background: #10b981; }
+
+        .copy-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .copy-btn.copied {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+        }
+
+        .code-block {
+            background: #1e2235;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 16px 16px;
+            overflow: auto;
+            max-height: 600px;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 24px;
+        }
+
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.7;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 4px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tab:hover { color: var(--text-secondary); }
+
+        .tab.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Relationship arrows */
+        .relationships {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .rel {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            border-radius: 10px;
+            font-size: 0.85rem;
+        }
+
+        .rel .arrow { color: var(--accent-cyan); font-weight: 700; }
+        .rel code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            background: rgba(139, 92, 246, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent-purple);
+        }
+
+        /* Flow */
+        .flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 0;
+            position: relative;
+        }
+
+        .flow-step::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 44px;
+            bottom: -16px;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .flow-step:last-child::before { display: none; }
+
+        .flow-num {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+        }
+
+        .flow-content h4 { margin-bottom: 4px; }
+        .flow-content p { color: var(--text-secondary); font-size: 0.85rem; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 48px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .cards { grid-template-columns: 1fr; }
+            .hero { padding: 50px 0 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <div class="container">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="badge"><span class="dot"></span> Evaluación T1 — 2026</div>
+            <h1><span class="icon">🅿️</span> Gestión de Parqueo</h1>
+            <p class="subtitle">Sistema de control de parqueo vehicular para la Universidad Privada del Norte</p>
+            <p class="course">Base de Datos Avanzadas y Big Data · T-SQL · SQL Server</p>
+        </section>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat">
+                <div class="number">9</div>
+                <div class="label">Tablas</div>
+            </div>
+            <div class="stat">
+                <div class="number">8</div>
+                <div class="label">Stored Procedures</div>
+            </div>
+            <div class="stat">
+                <div class="number">3</div>
+                <div class="label">Funciones</div>
+            </div>
+            <div class="stat">
+                <div class="number">5</div>
+                <div class="label">Triggers</div>
+            </div>
+            <div class="stat">
+                <div class="number">1</div>
+                <div class="label">Cursor</div>
+            </div>
+        </div>
+
+        <!-- a) Diagrama / Tablas -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple);">📊</div>
+                <h2>a) Diagrama de la Base de Datos</h2>
+                <span class="tag" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple);">9 Tablas</span>
+            </div>
+
+            <div class="er-diagram">
+                <table class="er-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tabla</th>
+                            <th>Primary Key</th>
+                            <th>Restricciones principales</th>
+                            <th>Req.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="table-name">Usuarios</td>
+                            <td class="pk">DNI (CHAR 8)</td>
+                            <td>CHECK tipo usuario, UNIQUE correo, CHECK DNI numérico</td>
+                            <td>RF-01</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="table-name">Vehiculos</td>
+                            <td class="pk">Placa (VARCHAR)</td>
+                            <td>FK→Usuarios, CHECK tipo vehículo</td>
+                            <td>RF-02</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="table-name">ZonasParqueo</td>
+                            <td class="pk">IdZona (IDENTITY)</td>
+                            <td>UNIQUE nombre, CHECK capacidad > 0</td>
+                            <td>RF-03</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="table-name">EspaciosParqueo</td>
+                            <td class="pk">IdEspacio (IDENTITY)</td>
+                            <td>FK→Zonas, CHECK tipo/estado, UNIQUE código</td>
+                            <td>RF-03</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td class="table-name">Tickets</td>
+                            <td class="pk">IdTicket (IDENTITY)</td>
+                            <td>FK→Vehículos, FK→Espacios, columna computada duración</td>
+                            <td>RF-04</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td class="table-name">Infracciones</td>
+                            <td class="pk">IdInfraccion (IDENTITY)</td>
+                            <td>FK→Usuarios, FK→Tickets (NULL)</td>
+                            <td>RF-05</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td class="table-name">Sanciones</td>
+                            <td class="pk">IdSancion (IDENTITY)</td>
+                            <td>FK→Infracciones, CHECK tipo/estado</td>
+                            <td>RF-05</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td class="table-name">Pagos</td>
+                            <td class="pk">IdPago (IDENTITY)</td>
+                            <td>FK→Sanciones, CHECK monto > 0, CHECK tipo pago</td>
+                            <td>RF-05</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td class="table-name">Historial_Auditoria</td>
+                            <td class="pk">IdHistorial (IDENTITY)</td>
+                            <td>CHECK operación, DEFAULT SYSTEM_USER y GETDATE()</td>
+                            <td>Trigger</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="relationships">
+                    <div class="rel"><code>Usuarios</code> <span class="arrow">1 ──▶ N</span> <code>Vehiculos</code></div>
+                    <div class="rel"><code>Usuarios</code> <span class="arrow">1 ──▶ N</span> <code>Infracciones</code></div>
+                    <div class="rel"><code>Vehiculos</code> <span class="arrow">1 ──▶ N</span> <code>Tickets</code></div>
+                    <div class="rel"><code>ZonasParqueo</code> <span class="arrow">1 ──▶ N</span> <code>EspaciosParqueo</code></div>
+                    <div class="rel"><code>EspaciosParqueo</code> <span class="arrow">1 ──▶ N</span> <code>Tickets</code></div>
+                    <div class="rel"><code>Infracciones</code> <span class="arrow">1 ──▶ N</span> <code>Sanciones</code></div>
+                    <div class="rel"><code>Sanciones</code> <span class="arrow">1 ──▶ N</span> <code>Pagos</code></div>
+                    <div class="rel"><code>Tickets</code> <span class="arrow">1 ──▶ N</span> <code>Infracciones</code></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- d) & e) Stored Procedures -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan);">⚙️</div>
+                <h2>d) & e) Stored Procedures y Funciones</h2>
+                <span class="tag" style="background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan);">8 SPs + 3 Funciones</span>
+            </div>
+
+            <div class="cards">
+                <div class="card card-blue">
+                    <span class="card-tag" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">INSERCIÓN</span>
+                    <h3>📥 SPs de Inserción (punto d)</h3>
+                    <p>7 procedimientos almacenados — uno por tabla. Cada SP incluye validaciones de existencia, TRY/CATCH para manejo de errores y mensajes informativos.</p>
+                </div>
+                <div class="card card-purple">
+                    <span class="card-tag" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple);">INGRESO VEHICULAR</span>
+                    <h3>🚗 sp_RegistrarIngresoVehicular (punto e)</h3>
+                    <p>SP principal con 5 validaciones: existencia del vehículo, un solo vehículo por usuario, deudas, suspensiones y disponibilidad de espacio.</p>
+                </div>
+                <div class="card card-green">
+                    <span class="card-tag" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green);">FUNCIONES</span>
+                    <h3>🔧 Funciones Escalares</h3>
+                    <p><strong>fn_TieneDeudas</strong> → BIT (¿tiene multas pendientes?)<br>
+                    <strong>fn_MontoDeudas</strong> → DECIMAL (total de deuda)<br>
+                    <strong>fn_TieneSuspension</strong> → BIT (¿está suspendido?)</p>
+                </div>
+            </div>
+
+            <!-- Flujo del SP principal -->
+            <div style="margin-top: 32px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 28px;">
+                <h3 style="margin-bottom: 20px; color: var(--accent-cyan);">🔄 Flujo de sp_RegistrarIngresoVehicular</h3>
+                <div class="flow">
+                    <div class="flow-step">
+                        <div class="flow-num">1</div>
+                        <div class="flow-content">
+                            <h4>Verificar vehículo</h4>
+                            <p>¿Existe la placa en la tabla Vehiculos?</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-num">2</div>
+                        <div class="flow-content">
+                            <h4>Un vehículo por usuario</h4>
+                            <p>¿El dueño ya tiene otro vehículo con ticket abierto?</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-num">3</div>
+                        <div class="flow-content">
+                            <h4>Deudas pendientes</h4>
+                            <p>Usa fn_TieneDeudas() y fn_MontoDeudas() para validar</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-num">4</div>
+                        <div class="flow-content">
+                            <h4>Suspensión activa</h4>
+                            <p>Usa fn_TieneSuspension() para verificar castigos</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-num">5</div>
+                        <div class="flow-content">
+                            <h4>Buscar espacio disponible</h4>
+                            <p>Busca según tipo de vehículo → Alerta si no hay espacio</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-num">✓</div>
+                        <div class="flow-content">
+                            <h4>Registrar ticket</h4>
+                            <p>INSERT en Tickets → El trigger g) actualiza el estado del espacio</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- f), g), h) Triggers -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--accent-orange);">⚡</div>
+                <h2>f), g), h) Triggers (Disparadores)</h2>
+                <span class="tag" style="background: rgba(245, 158, 11, 0.1); color: var(--accent-orange);">5 Triggers</span>
+            </div>
+
+            <div class="cards">
+                <div class="card card-orange">
+                    <span class="card-tag" style="background: rgba(245, 158, 11, 0.1); color: var(--accent-orange);">PUNTO F</span>
+                    <h3>📋 Triggers de Auditoría</h3>
+                    <p><strong>trg_Auditoria_Usuarios</strong> — INSERT, UPDATE, DELETE<br>
+                    <strong>trg_Auditoria_Vehiculos</strong> — INSERT, UPDATE, DELETE<br>
+                    <strong>trg_Auditoria_Pagos</strong> — INSERT, UPDATE, DELETE<br><br>
+                    Guardan en Historial_Auditoria los datos anteriores y nuevos en formato XML, usuario del sistema y fecha.</p>
+                </div>
+                <div class="card card-green">
+                    <span class="card-tag" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green);">PUNTO G</span>
+                    <h3>🔄 trg_ActualizarEstadoEspacio</h3>
+                    <p>Se activa en la tabla <strong>Tickets</strong>:<br>
+                    • INSERT → Cambia espacio a <strong>Ocupado</strong><br>
+                    • UPDATE (salida) → Cambia espacio a <strong>Disponible</strong></p>
+                </div>
+                <div class="card card-purple">
+                    <span class="card-tag" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple);">PUNTO H</span>
+                    <h3>💰 trg_CalcularTotalPagar</h3>
+                    <p>Se activa al INSERT en <strong>Infracciones</strong>. Calcula el total acumulado de infracciones y deuda pendiente del usuario.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- i) Cursor -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: rgba(236, 72, 153, 0.1); color: var(--accent-pink);">🔁</div>
+                <h2>i) Cursor — Permanencia Excedida</h2>
+                <span class="tag" style="background: rgba(236, 72, 153, 0.1); color: var(--accent-pink);">Cursor</span>
+            </div>
+
+            <div class="card card-purple" style="max-width: 100%;">
+                <span class="card-tag" style="background: rgba(236, 72, 153, 0.1); color: var(--accent-pink);">sp_ProcesarPermanenciaExcedida</span>
+                <h3>⏰ Detección de permanencia mayor a 12 horas</h3>
+                <p>Recorre todos los tickets abiertos cuya permanencia supera las 12 horas. Por cada ticket encontrado:<br><br>
+                ✅ Registra infracción con descripción <strong>"Permanencia excedida"</strong><br>
+                ✅ Crea sanción de tipo <strong>Multa por S/ 20.00</strong><br>
+                ✅ Incluye validación para <strong>no duplicar</strong> infracciones en el mismo ticket<br>
+                ✅ Muestra reporte detallado con placa, DNI, horas transcurridas y monto</p>
+            </div>
+        </section>
+
+        <!-- Código completo -->
+        <section class="code-section">
+            <div class="section-header">
+                <div class="section-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">💻</div>
+                <h2>Script T-SQL Completo</h2>
+                <span class="tag" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">1053 líneas</span>
+            </div>
+
+            <div class="code-header">
+                <div class="dots"><span></span><span></span><span></span></div>
+                <span class="filename">📄 GestionParqueoUPN.sql</span>
+                <button class="copy-btn" onclick="copyCode()">📋 Copiar código</button>
+            </div>
+            <div class="code-block">
+                <pre><code class="language-sql" id="sql-code">Cargando código...</code></pre>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Base de Datos Avanzadas y Big Data — Evaluación T1 · Universidad Privada del Norte</p>
+        <p style="margin-top: 8px;">
+            <a href="https://github.com/Dkaou/GestionParqueoUPN" target="_blank">📦 Ver en GitHub</a>
+        </p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script>
+        // Load SQL code from file
+        fetch('GestionParqueoUPN.sql')
+            .then(r => r.text())
+            .then(code => {
+                const el = document.getElementById('sql-code');
+                el.textContent = code;
+                hljs.highlightElement(el);
+            })
+            .catch(() => {
+                document.getElementById('sql-code').textContent = '-- Error cargando el archivo. Descárgalo desde GitHub.';
+            });
+
+        function copyCode() {
+            const code = document.getElementById('sql-code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '✅ Copiado!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copiar código';
+                    btn.classList.remove('copied');
+                }, 2500);
+            });
+        }
+
+        // Animate on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section, .card, .stat').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
