@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Exposición - Gestión de Parqueo UPN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-elements {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--primary); }
+        .blob-2 { bottom: -10%; right: -10%; width: 40vw; height: 40vw; background: var(--secondary); }
+        .blob-3 { top: 40%; left: 60%; width: 30vw; height: 30vw; background: var(--accent); animation-delay: -5s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Sections (Slides) */
+        .section {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .section:nth-child(2) { animation-delay: 0.1s; }
+        .section:nth-child(3) { animation-delay: 0.2s; }
+        .section:nth-child(4) { animation-delay: 0.3s; }
+        .section:nth-child(5) { animation-delay: 0.4s; }
+        .section:nth-child(6) { animation-delay: 0.5s; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        /* Diagram Containers */
+        .diagram-container {
+            width: 100%;
+            height: 600px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.1);
+            margin: 20px 0;
+            background: #fff; /* White background for diagrams */
+        }
+        
+        .diagram-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .diagram-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .diagram-tab {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .diagram-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        /* Content Formatting */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(0,0,0,0.2);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        ul li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 12px;
+            color: var(--text-muted);
+        }
+
+        ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05));
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        /* Speech section */
+        .speech {
+            background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(59,130,246,0.15));
+            border: 1px solid rgba(139,92,246,0.3);
+            text-align: center;
+            padding: 50px 40px;
+        }
+
+        .speech p {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #e2e8f0;
+            line-height: 1.8;
+            margin-bottom: 0;
+        }
+
+        .speech-title {
+            color: var(--secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 30px 20px; }
+            .diagram-container { height: 400px; }
+            .diagram-tabs { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-elements">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="badge">Guía Oficial de Exposición</div>
+            <h1>Gestión de Parqueo UPN</h1>
+            <p class="subtitle">Presentación interactiva del proyecto para la Evaluación T1. Sigue estos puntos clave para tu sustentación.</p>
+        </header>
+
+        <!-- 1. DIAGRAMAS -->
+        <section class="section" id="diagramas">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2>Diagramas de la Base de Datos</h2>
+            </div>
+            
+            <p style="color: var(--text-muted); margin-bottom: 20px;">
+                El sistema está diseñado en <strong>8 tablas principales</strong> enfocadas en registrar quién entra, con qué vehículo, dónde se cuadra y qué pasa si comete una infracción.
+            </p>
+
+            <div class="diagram-tabs">
+                <button class="diagram-tab active" onclick="showDiagram('conceptual')">Modelo Conceptual (Óvalos)</button>
+                <button class="diagram-tab" onclick="showDiagram('relacional')">Modelo Relacional (Tablas)</button>
+            </div>
+
+            <!-- Conceptual Diagram -->
+            <div class="diagram-container" id="container-conceptual">
+                <iframe src="https://viewer.diagrams.net/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Diagrama_Conceptual.drawio#Uhttps%3A%2F%2Fraw.githubusercontent.com%2FDkaou%2FGestionParqueoUPN%2Fmain%2FDiagrama_Conceptual.drawio" frameborder="0"></iframe>
+            </div>
+
+            <!-- Relational Diagram -->
+            <div class="diagram-container" id="container-relacional" style="display: none;">
+                <iframe src="https://viewer.diagrams.net/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=DiagramaER_Academico.drawio#Uhttps%3A%2F%2Fraw.githubusercontent.com%2FDkaou%2FGestionParqueoUPN%2Fmain%2FDiagramaER_Academico.drawio" frameborder="0"></iframe>
+            </div>
+
+            <div class="content-grid" style="margin-top: 30px;">
+                <div class="card">
+                    <h3>El Núcleo</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;"><code>Usuarios</code> y <code>Vehiculos</code>. Un usuario puede tener varios vehículos.</p>
+                </div>
+                <div class="card">
+                    <h3>La Transacción</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Cuando un vehículo entra, genera un <code>Ticket</code> que lo une a un <code>Espacio</code> y guarda la hora.</p>
+                </div>
+                <div class="card">
+                    <h3>Penalidades</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Las reglas rotas se vuelven <code>Infracciones</code>, que generan <code>Sanciones</code> canceladas mediante <code>Pagos</code>.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. CREACIÓN BD -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2>Restricciones e Integridad (B y C)</h2>
+            </div>
+            
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Diseñamos la base de datos con integridad referencial y restricciones estrictas para evitar datos basura.</p>
+
+            <div class="highlight-box">
+                <strong>Ejemplos clave a mencionar:</strong>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Usuarios:</strong> El DNI es CHAR(8) y Primary Key. El correo tiene UNIQUE.</li>
+                    <li><strong>Tickets:</strong> La duración en minutos es una columna <em>COMPUTED</em> (se calcula sola usando DATEDIFF).</li>
+                    <li><strong>Espacios:</strong> Tiene CHECK para que solo acepte estados "Disponible", "Ocupado" o "Mantenimiento".</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 3. INSERCIÓN -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <h2>Procesos de Inserción (D)</h2>
+            </div>
+            
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Creamos <strong>7 Procedimientos Almacenados</strong> para ingresar información, protegiendo el sistema.</p>
+
+            <div class="card">
+                <h3>Por qué son importantes:</h3>
+                <p style="color: var(--text-muted);">No insertamos datos a ciegas. <code>sp_InsertarUsuario</code> revisa que el DNI no exista antes de insertar; si existe, lanza un error limpio sin "reventar" la BD gracias al bloque <strong>TRY...CATCH</strong>.</p>
+            </div>
+        </section>
+
+        <!-- 4. INGRESO VEHICULAR -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">4</div>
+                <h2>El Proceso Estrella: Ingreso Vehicular (E)</h2>
+            </div>
+            
+            <p style="color: var(--text-muted); margin-bottom: 20px;">El SP <code>sp_RegistrarIngresoVehicular</code> es el cerebro del sistema. Usa <strong>3 Funciones Escalares</strong> para hacer 5 validaciones antes de levantar la talanquera.</p>
+
+            <div class="content-grid">
+                <div class="card" style="border-left: 3px solid #f59e0b;">
+                    <h3 style="color: #f59e0b;">Validaciones de Reglas</h3>
+                    <ul>
+                        <li>¿Existe el carro?</li>
+                        <li>¿Ya tiene otro carro adentro?</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left: 3px solid #ef4444;">
+                    <h3 style="color: #ef4444;">Llamada a Funciones</h3>
+                    <ul>
+                        <li><strong>fn_TieneDeudas</strong>: Si debe multas, NO ENTRA.</li>
+                        <li><strong>fn_TieneSuspension</strong>: Si está castigado, NO ENTRA.</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left: 3px solid #10b981;">
+                    <h3 style="color: #10b981;">Asignación de Espacio</h3>
+                    <ul>
+                        <li>Busca espacio para su tipo de vehículo. Si pasa todo, le genera el Ticket.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. TRIGGERS -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <h2>Automatización con Triggers (F, G, H)</h2>
+            </div>
+            
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Auditoría (XML)</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Cuando se inserta/actualiza un usuario o pago, se guarda un registro en <code>Historial_Auditoria</code> con los datos viejos y nuevos en <strong>formato XML</strong>.</p>
+                </div>
+                <div class="card">
+                    <h3>Estado Automático</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Al generar un ticket de ingreso, el espacio pasa a "Ocupado". Al registrar salida, pasa a "Disponible" sin intervención humana.</p>
+                </div>
+                <div class="card">
+                    <h3>Calculadora de Deuda</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Al registrar una infracción nueva, el trigger suma todas las multas impagas del alumno y muestra el total.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CURSORES -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">6</div>
+                <h2>El Cursor: Multa por Exceso (I)</h2>
+            </div>
+            
+            <p style="color: var(--text-muted);">
+                A veces los alumnos dejan el carro más de 12 horas. El SP <code>sp_ProcesarPermanenciaExcedida</code> usa un <strong>CURSOR</strong>. 
+                Recorre fila por fila los tickets abiertos, calcula el tiempo y si excede 12 horas, le aplica una infracción de <strong>S/ 20.00</strong> automáticamente, cuidando de no cobrar doble.
+            </p>
+        </section>
+
+        <!-- CONCLUSIÓN PITCH -->
+        <section class="section speech">
+            <div class="speech-title">Discurso de Cierre (Lee esto al final)</div>
+            <p>
+                "Profesor, el sistema no es solo un registro de datos. Es un sistema <strong>reactivo</strong>. Usa Procedimientos Almacenados para validar la integridad antes de insertar, usa Funciones modulares para consultar deudas que alimentan el SP principal, y usa Triggers y Cursores para automatizar el estado de los espacios, la auditoría en XML y la penalización automática, garantizando que todo el proceso funcione por sí solo."
+            </p>
+        </section>
+
+    </div>
+
+    <script>
+        function showDiagram(type) {
+            // Update tabs
+            document.querySelectorAll('.diagram-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update containers
+            document.getElementById('container-conceptual').style.display = 'none';
+            document.getElementById('container-relacional').style.display = 'none';
+            document.getElementById('container-' + type).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
