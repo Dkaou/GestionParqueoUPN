@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discurso Completo - Gestión Parqueo UPN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --primary: #3b82f6;
+            --accent: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.8;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .speech-card {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 40px 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .speech-card p {
+            font-size: 1.25rem;
+            color: #e2e8f0;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        .speech-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            display: block;
+            margin-top: 35px;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .tip-box {
+            margin-top: 40px;
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            font-size: 1.1rem;
+            color: #fcd34d;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Guion Completo de Exposición</h1>
+            <p class="subtitle">Discurso fluido para leer de corrido durante la presentación.</p>
+        </header>
+
+        <div class="speech-card">
+            
+            <span class="section-title">1. Introducción al Problema y Solución</span>
+            <p>"Buenos días profesor y compañeros. Hoy presento el <span class="highlight">Sistema de Gestión de Parqueo Vehicular para la UPN</span>. El objetivo de este proyecto no fue solo crear un registro de entradas y salidas, sino desarrollar una base de datos <strong>reactiva y automatizada</strong> que pueda tomar decisiones por sí sola, validar reglas de negocio en tiempo real y penalizar automáticamente a los infractores, garantizando el orden dentro del campus."</p>
+
+            <span class="section-title">2. El Diseño y Estructura</span>
+            <p>"Para lograr esto, diseñamos un Modelo de Base de Datos estructurado en <span class="highlight">8 tablas principales</span>. El flujo es simple: Tenemos a los <strong>Usuarios</strong> (alumnos o docentes) que poseen <strong>Vehículos</strong>. Estos vehículos ocupan <strong>Espacios</strong> de parqueo dentro de distintas <strong>Zonas</strong>. Cada vez que un vehículo entra, se genera un <strong>Ticket</strong> transaccional. Si el alumno incumple las normas, ese ticket deriva en <strong>Infracciones</strong>, que a su vez generan <strong>Sanciones</strong> económicas que se cancelan mediante la tabla <strong>Pagos</strong>.</p>
+            <p>Todo este diseño fue implementado en SQL Server usando integridad referencial estricta. Además, blindamos las tablas con restricciones <strong>CHECK</strong> (para que los estados solo puedan ser 'Disponible' u 'Ocupado') y restricciones <strong>UNIQUE</strong> (para evitar correos o placas duplicadas)."</p>
+
+            <span class="section-title">3. Inserción de Datos Segura</span>
+            <p>"En un sistema real, no podemos permitir que las aplicaciones hagan inserciones directas a las tablas. Por eso, desarrollamos <span class="highlight">Procedimientos Almacenados de inserción</span> para cada tabla. Estos actúan como un filtro de seguridad. Por ejemplo, antes de registrar un nuevo usuario, el procedimiento verifica que el DNI no exista previamente; si existe, el proceso se detiene y devuelve un error amigable gracias al uso de bloques <strong>TRY...CATCH</strong>, evitando que la base de datos colapse."</p>
+
+            <span class="section-title">4. El Corazón del Sistema: Ingreso Vehicular</span>
+            <p>"El procedimiento más importante y complejo del sistema es el <span class="highlight">Registro de Ingreso Vehicular</span>. Aquí aplicamos la lógica de negocio usando Funciones Escalares. Cuando un auto intenta entrar, el sistema hace 5 validaciones: verifica que la placa exista, verifica que el usuario no tenga otro vehículo adentro, y llama a funciones para ver si el usuario <span class="highlight">tiene multas impagas o está suspendido</span>. Si debe o está castigado, <strong>se le niega el ingreso</strong>. Si pasa todos estos filtros, busca automáticamente un espacio disponible y genera el Ticket."</p>
+
+            <span class="section-title">5. Automatización y Seguridad con Triggers</span>
+            <p>"Para quitarle carga de trabajo manual al operador, automatizamos procesos usando <span class="highlight">Triggers</span>. Primero, el control de espacios: al registrar un ingreso, el espacio cambia automáticamente a 'Ocupado', y al registrar la salida, vuelve a 'Disponible'. Segundo, la calculadora de deuda: al registrar una infracción, un trigger suma automáticamente las deudas del alumno y alerta el total. Y tercero, la auditoría: interceptamos cualquier cambio (INSERT, UPDATE, DELETE) y guardamos el antes y el después exacto en formato <span class="highlight">XML</span> dentro de la tabla Historial de Auditoría."</p>
+
+            <span class="section-title">6. El Cursor para Penalizaciones</span>
+            <p>"Finalmente, resolvimos un problema común: ¿Qué pasa con los alumnos que dejan su carro abandonado? Para esto implementamos un <span class="highlight">Cursor</span>. Este proceso recorre en lote, fila por fila, todos los tickets abiertos. Mediante la función DATEDIFF, calcula las horas de estadía. Si detecta que un vehículo lleva más de 12 horas, le inserta automáticamente una infracción por 'Permanencia Excedida' con una multa de 20 soles."</p>
+
+            <span class="section-title">7. Cierre de la Exposición</span>
+            <p>"En conclusión, hemos construido un sistema completo y escalable. Usamos Procedimientos y Funciones para aislar y validar la lógica, y usamos Triggers y Cursores para automatizar el mantenimiento del sistema. De esta manera, garantizamos la integridad de los datos en todo momento. Muchas gracias."</p>
+
+        </div>
+
+        <div class="tip-box">
+            💡 <strong>Tip para la exposición:</strong> A medida que vayas leyendo o parafraseando este texto, cambia de pantalla y muéstrale al profesor ese bloque de código específico en tu SQL Server (ej. cuando hables de XML, muestra el Trigger de Auditoría).
+        </div>
+
+    </div>
+
+</body>
+</html>
