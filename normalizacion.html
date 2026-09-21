@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normalización - Gestión Parqueo UPN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #09090b;
+            --surface: #18181b;
+            --primary: #8b5cf6;
+            --secondary: #3b82f6;
+            --accent: #10b981;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.7;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #27272a;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .intro-box {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .intro-box strong { color: var(--primary); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .nf-card {
+            background: var(--surface);
+            border: 1px solid #27272a;
+            border-radius: 16px;
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .nf-card:hover {
+            transform: translateY(-5px);
+            border-color: #3f3f46;
+        }
+
+        .nf-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+        }
+
+        .card-1nf::before { background: var(--secondary); }
+        .card-2nf::before { background: var(--accent); }
+        .card-3nf::before { background: var(--primary); }
+
+        .nf-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nf-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .nf-content {
+            font-size: 1.1rem;
+            color: #d4d4d8;
+            margin-bottom: 25px;
+        }
+
+        .example-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #52525b;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.05rem;
+        }
+
+        .example-box .label {
+            display: inline-block;
+            background: #27272a;
+            color: #e4e4e7;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .example-box p { margin: 0; }
+        .example-box strong { color: white; }
+
+        /* Speech section */
+        .speech {
+            margin-top: 50px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1));
+            border: 1px dashed rgba(16, 185, 129, 0.4);
+            text-align: center;
+            padding: 40px;
+            border-radius: 16px;
+        }
+
+        .speech-title {
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .speech p {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #e4e4e7;
+            line-height: 1.8;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Normalización de la Base de Datos</h1>
+            <p class="subtitle">Justificación técnica de la estructura relacional del proyecto.</p>
+        </header>
+
+        <div class="intro-box">
+            Sí, la base de datos de <strong>Gestión de Parqueo UPN</strong> está completamente normalizada, cumpliendo hasta la <strong>Tercera Forma Normal (3NF)</strong>. Esto garantiza la integridad referencial y elimina la redundancia de datos.
+        </div>
+
+        <div class="grid">
+            
+            <!-- 1NF -->
+            <div class="nf-card card-1nf">
+                <div class="nf-title">Primera Forma Normal (1NF)</div>
+                <div class="nf-subtitle">"Sin datos mezclados ni atributos multivaluados"</div>
+                <div class="nf-content">
+                    La cumplimos porque no hay atributos multivaluados (no guardamos listas separadas por comas dentro de una columna). Todos los datos son atómicos e indivisibles, y cada tabla posee una llave primaria única.
+                </div>
+                <div class="example-box" style="border-left-color: var(--secondary);">
+                    <div class="label">Para decirle al profesor:</div>
+                    <p>"Profesor, en la tabla <strong>Usuarios</strong>, no guardamos varios teléfonos o correos en una sola celda. Cada columna guarda un único dato y cada tabla tiene una Llave Primaria que identifica cada fila inequívocamente."</p>
+                </div>
+            </div>
+
+            <!-- 2NF -->
+            <div class="nf-card card-2nf">
+                <div class="nf-title">Segunda Forma Normal (2NF)</div>
+                <div class="nf-subtitle">"Dependencia total de la Llave Principal"</div>
+                <div class="nf-content">
+                    La cumplimos porque toda la información de cada tabla depende enteramente de su Llave Primaria. Como en nuestro diseño todas las tablas usan llaves primarias simples (de una sola columna), automáticamente satisfacen la 2NF.
+                </div>
+                <div class="example-box" style="border-left-color: var(--accent);">
+                    <div class="label">Para decirle al profesor:</div>
+                    <p>"Profesor, en la tabla <strong>Vehículos</strong>, datos como el 'Color' o el 'Modelo' dependen exclusivamente de la 'Placa' (su PK). No dependen de ningún otro dato externo."</p>
+                </div>
+            </div>
+
+            <!-- 3NF -->
+            <div class="nf-card card-3nf">
+                <div class="nf-title">Tercera Forma Normal (3NF)</div>
+                <div class="nf-subtitle">"Cero dependencia transitiva"</div>
+                <div class="nf-content">
+                    La cumplimos porque ninguna columna que no sea llave principal depende de otra columna que tampoco sea llave principal. Todo se relaciona limpiamente a través de Llaves Foráneas (FK) para evitar la redundancia.
+                </div>
+                <div class="example-box" style="border-left-color: var(--primary);">
+                    <div class="label">Para decirle al profesor:</div>
+                    <p>"Profesor, para cumplir la 3NF no guardamos el 'Nombre del Usuario' dentro de la tabla <strong>Vehículos</strong> ni en <strong>Tickets</strong>. Si lo hiciéramos, duplicaríamos datos. En su lugar, solo guardamos el <strong>DNI_Usuario</strong> como llave foránea (FK), y si queremos ver el nombre, simplemente hacemos un JOIN."</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="speech">
+            <div class="speech-title">💡 Resumen final por si te preguntan</div>
+            <p>
+                "Sí profesor, la base de datos está normalizada hasta la <strong>Tercera Forma Normal (3NF)</strong>. Separamos correctamente las entidades (Usuarios, Vehículos, Zonas, Tickets) relacionándolas únicamente mediante <strong>Llaves Foráneas (FK)</strong> para evitar la duplicación de datos (redundancia) y garantizar la integridad referencial en todo momento."
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>
