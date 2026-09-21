@@ -21,6 +21,10 @@ GO
 CREATE DATABASE GestionParqueoUPN;
 GO
 
+-- Habilitar la creacion de diagramas de base de datos
+ALTER AUTHORIZATION ON DATABASE::GestionParqueoUPN TO [sa];
+GO
+
 USE GestionParqueoUPN;
 GO
 
