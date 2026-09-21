@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guion de Exposición - Gestión Parqueo UPN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #09090b;
+            --surface: #18181b;
+            --primary: #3b82f6;
+            --secondary: #10b981;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --cue-bg: rgba(245, 158, 11, 0.1);
+            --cue-color: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.7;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            border-bottom: 2px solid #27272a;
+            padding-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .instruction {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            color: #93c5fd;
+        }
+
+        /* Script Sections */
+        .step {
+            background: var(--surface);
+            border: 1px solid #27272a;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateY(-5px);
+            border-color: #3f3f46;
+        }
+
+        .point-badge {
+            position: absolute;
+            top: -20px;
+            left: 40px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+        }
+
+        .point-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            color: var(--text-main);
+        }
+
+        .script-text {
+            font-size: 1.25rem;
+            color: #e4e4e7;
+            margin-bottom: 20px;
+        }
+
+        .script-text strong {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0 5px;
+            border-radius: 4px;
+        }
+
+        /* Presenter Cues */
+        .cue {
+            display: inline-block;
+            background: var(--cue-bg);
+            color: var(--cue-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 15px 0;
+            border: 1px dashed var(--cue-color);
+        }
+
+        .code-mention {
+            font-family: monospace;
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="subtitle">Modo Presentador</div>
+            <h1>Guion de Exposición T1</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Lee este guion paso a paso. Sigue las indicaciones amarillas para saber qué mostrar en pantalla.</p>
+        </header>
+
+        <div class="instruction">
+            <strong>Tip:</strong> Pon esta página en una mitad de tu pantalla, y en la otra mitad ten abierto el SSMS (SQL Server) y la página de los diagramas.
+        </div>
+
+        <!-- PUNTO A -->
+        <div class="step" id="punto-a">
+            <div class="point-badge">Punto A</div>
+            <h2 class="point-title">Diseño de la Base de Datos</h2>
+            <div class="cue">👉 [Muestra en pantalla la página web de los diagramas]</div>
+            <p class="script-text">
+                "Buenos días profesor. Para este proyecto de Gestión de Parqueo UPN, diseñamos la base de datos dividida en <strong>8 tablas principales</strong>. 
+                Como puede ver en el modelo, tenemos las tablas núcleo que son <strong>Usuarios y Vehículos</strong>, luego tenemos la gestión física con <strong>Zonas y Espacios de Parqueo</strong>. 
+                El proceso principal se registra en la tabla <strong>Tickets</strong>, y si ocurre algún problema, tenemos el flujo de <strong>Infracciones, Sanciones y Pagos</strong>."
+            </p>
+        </div>
+
+        <!-- PUNTOS B Y C -->
+        <div class="step" id="punto-bc">
+            <div class="point-badge">Puntos B y C</div>
+            <h2 class="point-title">Creación de la BD y Restricciones</h2>
+            <div class="cue">👉 [Abre tu SQL Server y muestra las tablas y constraints]</div>
+            <p class="script-text">
+                "Sobre la creación, aplicamos <strong>integridad referencial estricta</strong>. Usamos llaves foráneas en todas las relaciones. Además, implementamos <strong>restricciones CHECK y UNIQUE</strong>. 
+                Por ejemplo, en la tabla <em>Usuarios</em> el correo es UNIQUE para evitar duplicados; en <em>EspaciosParqueo</em> hay un CHECK para que solo acepte estados 'Disponible', 'Ocupado' o 'Mantenimiento'; 
+                y en <em>Tickets</em> agregamos una <strong>columna computada</strong> que calcula automáticamente la duración en minutos usando DATEDIFF."
+            </p>
+        </div>
+
+        <!-- PUNTO D -->
+        <div class="step" id="punto-d">
+            <div class="point-badge">Punto D</div>
+            <h2 class="point-title">Procedimientos de Inserción</h2>
+            <div class="cue">👉 [Muestra en el SQL el código de 'sp_InsertarUsuario' o 'sp_InsertarVehiculo']</div>
+            <p class="script-text">
+                "Para no insertar datos directamente a las tablas, creamos <strong>7 Procedimientos Almacenados</strong> básicos de inserción, uno por cada tabla. 
+                Lo importante aquí es que todos tienen validaciones preventivas. Por ejemplo, antes de insertar un usuario, verificamos si el DNI ya existe; si existe, detenemos el proceso con un <strong>RAISERROR</strong> dentro de un bloque TRY-CATCH."
+            </p>
+        </div>
+
+        <!-- PUNTO E -->
+        <div class="step" id="punto-e">
+            <div class="point-badge">Punto E</div>
+            <h2 class="point-title">SP Principal (Registro Vehicular) y Funciones</h2>
+            <div class="cue">👉 [Muestra el código de 'sp_RegistrarIngresoVehicular' y resalta las llamadas a las funciones 'dbo.fn_TieneDeudas']</div>
+            <p class="script-text">
+                "Este es el núcleo lógico del sistema. El SP de ingreso vehicular hace <strong>5 validaciones secuenciales</strong>. 
+                Para lograr esto limpiamente, desarrollamos <strong>3 funciones escalares</strong>: una para ver si tiene deudas, otra para calcular el monto, y otra para suspensiones. 
+                El SP verifica: 1) Que la placa exista. 2) Que el usuario no tenga otro vehículo adentro. 3) Usa la función para bloquearlo si tiene deuda. 4) Lo bloquea si está suspendido. Y 5) Busca dinámicamente un espacio libre para su tipo de vehículo."
+            </p>
+        </div>
+
+        <!-- PUNTO F -->
+        <div class="step" id="punto-f">
+            <div class="point-badge">Punto F</div>
+            <h2 class="point-title">Auditoría con Triggers y XML</h2>
+            <div class="cue">👉 [Muestra la tabla 'Historial_Auditoria' o el código de 'trg_Auditoria_Usuarios']</div>
+            <p class="script-text">
+                "En cuanto a seguridad, implementamos <strong>Triggers de Auditoría</strong> (AFTER INSERT, UPDATE, DELETE) en las tablas críticas como Usuarios y Vehículos. 
+                Estos triggers capturan qué usuario hizo el cambio, en qué fecha, y lo más importante: <strong>convierten los registros eliminados o insertados a formato XML</strong> para guardar el antes y el después exacto en la tabla Historial_Auditoria."
+            </p>
+        </div>
+
+        <!-- PUNTO G -->
+        <div class="step" id="punto-g">
+            <div class="point-badge">Punto G</div>
+            <h2 class="point-title">Automatización: Estado del Espacio</h2>
+            <div class="cue">👉 [Muestra el código del trigger 'trg_ActualizarEstadoEspacio']</div>
+            <p class="script-text">
+                "Para evitar errores humanos, la tabla EspaciosParqueo se actualiza sola. Creamos un trigger en la tabla <strong>Tickets</strong>. 
+                Si se inserta un ticket nuevo (entra un auto), el trigger automáticamente hace un UPDATE al espacio y lo marca como 'Ocupado'. Cuando al ticket se le hace un UPDATE para registrar la salida, el trigger libera el espacio poniéndolo 'Disponible'."
+            </p>
+        </div>
+
+        <!-- PUNTO H -->
+        <div class="step" id="punto-h">
+            <div class="point-badge">Punto H</div>
+            <h2 class="point-title">Trigger: Total a Pagar</h2>
+            <div class="cue">👉 [Muestra el código de 'trg_CalcularTotalPagar']</div>
+            <p class="script-text">
+                "También agregamos el trigger de multas. Cuando se inserta un nuevo registro en la tabla <strong>Infracciones</strong>, este trigger se dispara. 
+                Lo que hace es sumar todas las sanciones activas de ese usuario y lanza un mensaje PRINT alertando del <strong>monto total acumulado</strong> que el usuario debe pagar en ese momento."
+            </p>
+        </div>
+
+        <!-- PUNTO I -->
+        <div class="step" id="punto-i">
+            <div class="point-badge">Punto I</div>
+            <h2 class="point-title">El Cursor: Permanencia Excedida</h2>
+            <div class="cue">👉 [Muestra el código de 'sp_ProcesarPermanenciaExcedida' donde está el comando DECLARE CURSOR]</div>
+            <p class="script-text">
+                "Finalmente, profesor, implementamos el <strong>Cursor</strong>. Este cursor se encarga de penalizar a los que se quedan dormidos en el parqueo. 
+                Recorre fila por fila la tabla de Tickets buscando vehículos que lleven más de 12 horas sin hora de salida registrada. Si encuentra uno, automáticamente le genera una infracción por 'Permanencia Excedida' de 20 soles, verificando antes no duplicarle la multa. Así completamos la automatización total del sistema."
+            </p>
+            <div class="cue" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: #10b981;">🎉 [Finaliza tu exposición agradeciendo al profesor]</div>
+        </div>
+
+    </div>
+
+</body>
+</html>
